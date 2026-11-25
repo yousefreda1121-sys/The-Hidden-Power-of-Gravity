@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>The apple and the Moon</title>
+<meta name="description" content="Two rules explain why an apple falls and the Moon does not. Play with both and watch the numbers.">
+<style>
+:root{--bg:#f7f3ea;--fg:#1d1a14;--mut:#6b6455;--ac:#a8431a;--bl:#1f5fa8;--card:#ece5d2;--line:#cfc6b0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1218;--fg:#e9e4d8;--mut:#9a9486;--ac:#ffb454;--bl:#6cc4ff;--card:#171b24;--line:#2c3342}}
+:root[data-theme="dark"]{--bg:#0f1218;--fg:#e9e4d8;--mut:#9a9486;--ac:#ffb454;--bl:#6cc4ff;--card:#171b24;--line:#2c3342}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.65 Georgia,'Times New Roman',serif}
+main{max-width:680px;margin:0 auto;padding:44px 20px 80px}
+h1{font-size:clamp(34px,7vw,52px);line-height:1.1;margin:0 0 20px;font-weight:400}
+h2{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--ac);margin:56px 0 12px;font-weight:400}
+p{margin:0 0 16px}a{color:var(--bl)}sup a{text-decoration:none}
+.law{border-left:3px solid var(--ac);padding:2px 16px;margin:20px 0;font-size:20px}
+canvas{display:block;width:100%;border:1px solid var(--line);background:var(--card)}
+.cap{font-size:14px;color:var(--mut);margin:8px 0 14px}
+.ctl{display:grid;grid-template-columns:auto 1fr 3.2em;gap:6px 12px;align-items:center;font-size:16px;margin:10px 0}
+.ctl input{width:100%;accent-color:var(--ac)}.ctl output{text-align:right;font-variant-numeric:tabular-nums}
+button{font:inherit;font-size:15px;padding:8px 18px;margin:4px 8px 4px 0;background:transparent;color:var(--fg);border:1px solid var(--fg);border-radius:3px;cursor:pointer}
+button.go{background:var(--ac);border-color:var(--ac);color:var(--bg)}
+.ro{font-family:ui-monospace,Consolas,monospace;font-size:14px;margin:10px 0;min-height:3.4em}
+.say{min-height:3.2em;font-style:italic}
+ol{font-size:15px;color:var(--mut);padding-left:22px}li{margin-bottom:8px}
+main{perspective:1400px;perspective-origin:50% 30%}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;flex-wrap:wrap;padding:10px 0;background:var(--bg);border-bottom:1px solid var(--line);margin-bottom:10px}
+#nav button{font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;margin:0;border-color:var(--line);color:var(--mut)}
+#nav button.on{color:var(--bg);background:var(--ac);border-color:var(--ac)}
+.pg{transform-origin:50% 0;transition:transform .9s cubic-bezier(.2,.7,.2,1),opacity .9s}
+.pg.off{transform:rotateX(-28deg) translateZ(-160px) translateY(40px);opacity:.12}
+@media (prefers-reduced-motion:reduce){.pg{transition:none}.pg.off{transform:none;opacity:1}}
+</style></head><body><main><nav id="nav"><button>Intro</button><button>Plate I</button><button>Plate II</button><button>Found</button><button>Notes</button></nav><section class="pg" id="intro">
+<h1>The apple and the Moon</h1>
+<p>An apple falls straight down. The Moon does not fall at all. In 1666 Newton asked whether one pull could explain both.<sup><a href="#fn1" id="r1">1</a></sup> Two rules are enough to find out, and every number on this page is computed live from them.</p>
+<div class="law">Gravity: <b>F = G · m₁ · m₂ / r²</b><br>Motion: <b>F = m · a</b></div>
+
+</section><section class="pg" id="plate1"><h2>Plate I. The pull between two masses</h2>
+<p>Every mass pulls on every other mass. Move the sliders and watch the arrows. Press <b>Mark</b> to remember the current force, change <i>one</i> slider, and read how the force compares. What happens if you double a mass? If you double the distance?</p>
+<canvas id="c1"></canvas>
+<div class="cap">Fig. 1. Two bodies and the pull between them. Arrow length shows the force (it stops growing when it runs out of room).<sup><a href="#fn2" id="r2">2</a></sup></div>
+<div class="ctl"><span>m₁</span><input type="range" id="s1" min="1" max="100" value="10"><output id="v1">10</output>
+<span>m₂</span><input type="range" id="s2" min="1" max="100" value="10"><output id="v2">10</output>
+<span>r</span><input type="range" id="s3" min="4" max="20" value="10"><output id="v3">10</output></div>
+<button id="mk" class="go">Mark</button><button id="rm">Clear mark</button>
+<div class="ro" id="o1"></div>
+
+</section><section class="pg" id="plate2"><h2>Plate II. Throwing the Moon sideways</h2>
+<p>Gravity does not move the Moon. It changes the Moon’s velocity, a little more every instant, and <i>a = F / m</i> says by how much.<sup><a href="#fn3" id="r3">3</a></sup> Choose a sideways launch speed and see if the Moon crashes, circles or leaves. Then change the Moon’s mass. Does the path change?</p>
+<canvas id="c2"></canvas>
+<div class="cap">Fig. 2. Earth (blue) and the Moon (grey), seen from above. Blue arrow: velocity. Orange arrow: acceleration, always toward Earth. Both are recomputed at every step.<sup><a href="#fn4" id="r4">4</a></sup></div>
+<div class="ctl"><span>Speed</span><input type="range" id="sv" min="0" max="6" step="0.05" value="2"><output id="vv">2</output>
+<span>Moon mass</span><input type="range" id="sm" min="1" max="10" value="1"><output id="vm">1</output></div>
+<button id="go" class="go">Launch</button><button id="pa">Pause</button><button id="rs">Reset</button>
+<div class="say" id="msg">Pick a speed and press Launch. Somewhere between 2 and 5 is interesting.<sup><a href="#fn5" id="r5">5</a></sup></div>
+<div class="ro" id="o2"></div>
+
+</section><section class="pg" id="found"><h2>What you found</h2>
+<p>Gravity gets stronger with mass and weaker with distance, and a force changes motion, not position. Throw something sideways fast enough and it keeps missing the ground. That is an orbit, and it is the same pull that dropped the apple.</p>
+
+</section><section class="pg" id="notes"><h2>Notes</h2>
+<ol>
+<li id="fn1">The story was recorded by Newton’s friend William Stukeley in 1726, from Newton’s own memory. Whether an apple really hit him is uncertain; the question he asked is real. <a href="#r1">↩</a></li>
+<li id="fn2">Units are normalized so numbers fit on screen: G = 1 on Plate I and G·M = 100 on Plate II. In SI units G is about 6.67 × 10⁻¹¹ N·m²/kg². Only the size of the numbers changes, never the rule. <a href="#r2">↩</a></li>
+<li id="fn3">The real Moon falls toward Earth by about 1.4 millimetres every second. It never arrives because it also moves sideways at about 1 kilometre per second. <a href="#r3">↩</a></li>
+<li id="fn4">Time moves in fixed slices of 0.01 using velocity Verlet: update the position, recompute the acceleration there, then update the velocity from the average of the old and new acceleration. Nothing on this page is pre-drawn; the code is this page, so View Source shows all of it. <a href="#r4">↩</a></li>
+<li id="fn5">Escape speed is √2 times the circular-orbit speed at the same distance. Try to find both. <a href="#r5">↩</a></li>
+</ol></section></main>
+<script>
+const $=id=>document.getElementById(id),css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function cv(id,h){const c=$(id),d=devicePixelRatio||1,w=c.clientWidth;c.width=w*d;c.height=h*d;c.style.height=h+'px';const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,w,h);return[x,w]}
+function arr(x,a,b,c,d,col){if(Math.hypot(c-a,d-b)<4)return;x.strokeStyle=x.fillStyle=col;x.lineWidth=2.5;x.beginPath();x.moveTo(a,b);x.lineTo(c,d);x.stroke();const t=Math.atan2(d-b,c-a);x.beginPath();x.moveTo(c,d);x.lineTo(c-9*Math.cos(t-.4),d-9*Math.sin(t-.4));x.lineTo(c-9*Math.cos(t+.4),d-9*Math.sin(t+.4));x.closePath();x.fill()}
+const pr=v=>+v.toPrecision(3);
+/* Plate I: F = G m1 m2 / r^2, G = 1 */
+const P1={m1:10,m2:10,r:10,ref:null};
+const F1=(a,b,r)=>a*b/(r*r);
+function draw1(){const[x,w]=cv('c1',210),{m1,m2,r}=P1,f=F1(m1,m2,r),sc=(w-100)/22,cx=w/2,y=90,ra=sc*.3*Math.cbrt(m1),rb=sc*.3*Math.cbrt(m2),xa=cx-r*sc/2,xb=cx+r*sc/2;
+x.font='14px Georgia';x.textAlign='center';
+x.fillStyle=css('--ac');x.beginPath();x.arc(xa,y,ra,0,7);x.fill();x.fillStyle=css('--bl');x.beginPath();x.arc(xb,y,rb,0,7);x.fill();
+const gap=Math.max(0,xb-xa-ra-rb-10),len=Math.min(f*40,gap),fg=css('--fg');
+arr(x,xa+ra+4,y,xa+ra+4+len,y,fg);arr(x,xb-rb-4,y,xb-rb-4-len,y,fg);
+x.fillStyle=css('--mut');x.fillText('m₁ = '+m1,xa,y-ra-12);x.fillText('m₂ = '+m2,xb,y-rb-12);
+x.strokeStyle=css('--mut');x.lineWidth=1;x.beginPath();x.moveTo(xa,165);x.lineTo(xb,165);x.moveTo(xa,159);x.lineTo(xa,171);x.moveTo(xb,159);x.lineTo(xb,171);x.stroke();x.fillText('r = '+r,cx,189);
+$('o1').innerHTML=`F = G·m₁·m₂ / r² = <b>${pr(f)}</b> &nbsp;(G = 1)`+(P1.ref?`<br>Marked force: ${pr(P1.ref)} &nbsp; Now: <b>×${pr(f/P1.ref)}</b> the marked force`:'<br>Press Mark to compare.')}
+[['s1','m1','v1'],['s2','m2','v2'],['s3','r','v3']].forEach(([s,k,v])=>$(s).oninput=e=>{P1[k]=+e.target.value;$(v).textContent=P1[k];draw1()});
+$('mk').onclick=()=>{P1.ref=F1(P1.m1,P1.m2,P1.r);draw1()};$('rm').onclick=()=>{P1.ref=null;draw1()};
+/* Plate II: velocity Verlet, GM = 100 */
+const GM=100,RE=1.5,H=.01,P2={v:2,m:1};let S;
+function reset2(txt){S={run:false,x:10,y:0,vx:0,vy:P2.v,tr:[[10,0]],ang:0,last:0,out:0,n:0};$('pa').textContent='Pause';$('msg').textContent=txt||'Pick a speed and press Launch.';draw2()}
+const acc=(x,y)=>{const r=Math.hypot(x,y),k=-GM/(r*r*r);return[k*x,k*y]};
+function step(){const s=S,a0=acc(s.x,s.y);s.x+=s.vx*H+.5*a0[0]*H*H;s.y+=s.vy*H+.5*a0[1]*H*H;const a1=acc(s.x,s.y);s.vx+=.5*(a0[0]+a1[0])*H;s.vy+=.5*(a0[1]+a1[1])*H;
+const r=Math.hypot(s.x,s.y),an=Math.atan2(s.y,s.x);let d=an-s.last;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;s.ang+=d;s.last=an;
+const E=.5*(s.vx*s.vx+s.vy*s.vy)-GM/r;
+if(++s.n%3==0)s.tr.push([s.x,s.y]);if(s.tr.length>3000)s.tr.shift();
+if(r<=RE+.4)return end('Crash. It moved sideways too slowly, so gravity pulled it into Earth.');
+if(E>=0&&r>45)return end(Math.abs(s.ang)>.6?'Flyby. Gravity bent the path, but the Moon was fast enough never to come back.':'Escape. Gravity slows it down but never turns it around.');
+if(Math.abs(s.ang)>7.5&&E<0)return end('Orbit! Gravity keeps bending the path, so the Moon is always falling and always missing Earth.')}
+function end(m){S.run=false;S.out=1;$('msg').textContent=m;return 1}
+function draw2(){const[x,w]=cv('c2',330),h=330,sc=h/2/20,cx=w/2,cy=h/2,s=S,r=Math.hypot(s.x,s.y),v=Math.hypot(s.vx,s.vy),m=P2.m,F=GM*m/(r*r),a=F/m;
+x.fillStyle=css('--bl');x.beginPath();x.arc(cx,cy,RE*sc,0,7);x.fill();
+x.strokeStyle=css('--mut');x.lineWidth=1.2;x.beginPath();s.tr.forEach((p,i)=>i?x.lineTo(cx+p[0]*sc,cy-p[1]*sc):x.moveTo(cx+p[0]*sc,cy-p[1]*sc));x.stroke();
+const px=cx+s.x*sc,py=cy-s.y*sc;x.fillStyle=css('--fg');x.globalAlpha=.7;x.beginPath();x.arc(px,py,5+m*.5,0,7);x.fill();x.globalAlpha=1;
+arr(x,px,py,px+s.vx*14,py-s.vy*14,css('--bl'));arr(x,px,py,px-s.x/r*Math.min(70,a*60),py+s.y/r*Math.min(70,a*60),css('--ac'));
+$('o2').innerHTML=`speed ${v.toFixed(2)} &nbsp; distance ${r.toFixed(1)}<br>F = G·M·m / r² = ${F.toFixed(2)} &nbsp; a = F / m = ${a.toFixed(3)}`}
+$('sv').oninput=e=>{P2.v=+e.target.value;$('vv').textContent=P2.v;reset2()};$('sm').oninput=e=>{P2.m=+e.target.value;$('vm').textContent=P2.m;reset2()};
+$('go').onclick=()=>{reset2('Running. Watch the arrows change at every step.');S.run=true};
+$('pa').onclick=()=>{S.run=!S.run;$('pa').textContent=S.run?'Pause':'Resume'};$('rs').onclick=()=>reset2();
+(function loop(){requestAnimationFrame(loop);if(S&&S.run){for(let i=0;i<6&&S.run;i++)step();draw2()}})();
+function all(){draw1();reset2(S&&$('msg').textContent)}
+addEventListener('resize',all);matchMedia('(prefers-color-scheme: dark)').addEventListener('change',all);
+const pgs=[...document.querySelectorAll('.pg')],btns=[...document.querySelectorAll('#nav button')];
+btns.forEach((b,i)=>b.onclick=()=>pgs[i].scrollIntoView({behavior:'smooth',block:'start'}));
+function upd(){const top=scrollY,bot=scrollY+innerHeight,mid=scrollY+innerHeight*.4,m=innerHeight*.1;pgs.forEach((p,i)=>{const t=p.offsetTop,h=p.offsetHeight;p.classList.toggle('off',!(t<bot-m&&t+h>top+m));btns[i].classList.toggle('on',t<=mid&&t+h>mid)})}
+addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+draw1();reset2();
+</script></body></html>
